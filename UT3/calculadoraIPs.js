@@ -1,7 +1,7 @@
 const prompt = require('prompt-sync')();
 // si es valida, q classe es, mask, privada publica, 
 
-console.log("CLASSIFICADOR D'ADRECES IP")
+console.log("===CLASSIFICADOR D'ADRECES IP===")
 // Part 1: demanar els quatre octets i convertir-los a número
 let octet1 = Number(prompt("Introduce el priemr octeto: "));
 let octet2 = Number(prompt("Introduce el segundo octeto: "));
@@ -15,17 +15,13 @@ let conf;
 if ((octet1 <= 255 && octet1 >= 0) && (octet2 <= 255 && octet2 >= 0) && (octet3 <= 255 && octet3 >= 0) && (octet4 <= 255 && octet4 >= 0)) {
     console.log("")
     conf = true
-    console.log(`La teva IP:${IP}`)
+    console.log(`La teva IP: ${IP}`)
     
 }   else {
     console.log("")
     conf = false
     console.log("Adreça no vàlida: cada octet ha d'estar entre 0 i 255.")
-    
-}
-
-if (conf === false) {
-     process.exit(1);
+    process.exit(1)
 }
 
  // Part 3: la classe segons el primer octet
@@ -68,15 +64,37 @@ switch (classe) {
  
   console.log("Màscara per defecte: " + mascara);
  
-  // Part 5: privada o pública (només per a classes A, B i C)
-  // Rangs privats:
-  // A: 10.0.0.0 - 10.255.255.255
-  // B: 172.16.0.0 - 172.31.255.255
-  // C: 192.168.0.0 - 192.168.255.255
-  let privada = octet1 === 10 ||
-                (octet1 === 172 && octet2 >= 16 && octet2 <= 31) ||
-                (octet1 === 192 && octet2 === 168);
- 
-  if (classe === "A" || classe === "B" || classe === "C") {
-    console.log("Tipus: " + (privada ? "Privada" : "Pública"));
+// Part 5: privada o pública (només per a classes A, B i C)
+
+let privada = false;
+
+switch (octet1) {
+  case 10:
+    privada = true;
+    break;
+
+  case 172:
+    if (octet2 >= 16 && octet2 <= 31) {
+      privada = true;
+    }
+    break;
+
+  case 192:
+    if (octet2 === 168) {
+      privada = true;
+    }
+    break;
+
+  default:
+    privada = false;
+    break;
+}
+
+// Només per a classes A, B o C utilitzant el ternari
+if (classe === "A" || classe === "B" || classe === "C") {
+  if (privada) {
+    console.log("Tipus: Privada");
+  } else {
+    console.log("Tipus: Pública");
   }
+}
