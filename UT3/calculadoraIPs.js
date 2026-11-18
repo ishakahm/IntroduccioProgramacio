@@ -72,20 +72,17 @@ switch (octet1) {
   case 10:
     privada = true;
     break;
-
   case 172:
     if (octet2 >= 16 && octet2 <= 31) {
       privada = true;
     }
     break;
-
   case 192:
     if (octet2 === 168) {
       privada = true;
     }
     break;
-
-  default:
+  default:                              
     privada = false;
     break;
 }
